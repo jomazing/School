@@ -1,79 +1,131 @@
 
 package school;
-
 import java.util.ArrayList;
-
 public class Course {
-    private static ArrayList<Person> people = new ArrayList<Person>();
-    enum type{
-        Math, Science, History, English, Language, Elective, PE
+    enum Type {
+        Math,Science,English,History,Language,Elective,PE
     }
+    public static final int numPeriods = 4;
+    private static ArrayList<Course> courses = new ArrayList<Course>();
     private String name;
+    private Type type;
     private int period;
+    private ArrayList<Student> students = new ArrayList<Student>();
+    private Teacher theTeacher;
     
-    Course(String name_, int period_)
+    public static Course addCourse(String _name,
+    Type _type, int _period)
     {
-        name = name_;
-        period = period_;
+        Course temp = new Course(_name,_type,_period);
+        courses.add(temp);
+        return(temp);
+    }
+    Course()
+    {
+        name = "None";
+        type = Type.Elective;
+        period = 1;
+    }
+    Course(String _name,Type _type, int _period)
+    {
+        name = _name;
+        type = _type;
+        period = _period;
+    }   
+
+    public boolean addStudent(Student _student)
+    {
+        if (!setStudentOK(_student))
+            return(false);
+        if (!_student.setCourseOK(this))
+            return(false);
+        _student.setCourseDoIt(this);
+        setStudentDoIt(_student);
+        return(true);
+    }  
+    public boolean setStudentOK(Student _student)
+    {
+        if (_student == null)
+            return(false);
+        if (students.contains(_student))
+            return(false);
+        return(true);
+    }
+    public void setStudentDoIt(Student _student)
+    {
+        students.add(_student);
+    }    
+    
+        /////////////////////    
+    
+    
+    public boolean addTeacher(Teacher _teacher)
+    {
+        if (!setTeacherOK(_teacher))
+            return(false);
+        if (!_teacher.setCourseOK(this))
+            return(false);
+        _teacher.setCourseDoIt(this);
+        setTeacherDoIt(_teacher);
+        return(true);
+    }  
+    public boolean setTeacherOK(Teacher _teacher)
+    {
+        if (_teacher == null)
+            return(false);
+        if (theTeacher != null)
+            return(false);
+        return(true);
+    }
+    public void setTeacherDoIt(Teacher _teacher)
+    {
+        theTeacher = _teacher;
+    }    
+    
+    public void setPeriod(int _period)
+    {
+        period = _period;
     }
     public int getPeriod()
     {
         return(period);
-    }
-    public void setPeriod(int _period)
+    }       
+    public void setName(String _name)
     {
-       period = _period;
+        name = _name;
     }
     public String getName()
     {
         return(name);
-    }
-    public void setName(String _name)
+    }    
+    public void setType(Type _type)
     {
-       name = _name;
+        type = _type;
     }
-    public static Course addCourse(String name_, int period_)
+    public Type getType()
     {
-        Course temp = new Person(name_,period_);
-//        people[currentPeopleIndex++] = temp;
-        people.add(temp);
-        return(temp);
+        return(type);
+    }  
+    
+
+    public Student getStudent(int _index)
+    {
+        return(students.get(_index));
     }
+    public int getNumStudents()
+    {
+        return(students.size());
+    }    
     public static void printNames()
     {
-        System.out.println("======printNames======");
-//        for (int i=0;i<people.length;i++)
-//        {
-//            if (people[i] != null)
-//            {
-//                System.out.println(people[i].getName());
-//            }
-//        }
-        for (Person temp : people)
-        {     
-                System.out.println(temp.getName());
-        }
-    }
-    public static void printNames(Person.Gender gender_)
-    {
-        System.out.println("======printNames======");
-//        for (int i=0;i<people.length;i++)
-//        {
-//            if (people[i] != null)
-//            {
-//                System.out.println(people[i].getName());
-//            }
-//        }
-        for (Person temp : people)
+        System.out.println("===printNames===");
+        for (Course temp : courses)
         {
-            if (temp.gender == gender_)
                 System.out.println(temp.getName());
-        }
-    }
+        }        
+    }    
     public String toString()
     {
-        return(name + " " + gender + " " + weight);
-    }
-    
-    
+        return(name + " " + type + " " + period);
+    }    
 }
